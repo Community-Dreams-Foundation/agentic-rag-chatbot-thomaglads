@@ -1,0 +1,122 @@
+CONSTRUCTION SITE SAFETY MANUAL
+Version 2.1 - Weather & Environmental Conditions
+
+1. GENERAL SAFETY PROTOCOLS
+
+1.1 Scope
+This manual covers safety procedures for all outdoor construction activities including but not limited to: crane operations, scaffolding work, roofing, excavation, and concrete pouring.
+
+1.2 Authority
+Site managers and safety officers have the authority to halt any operation that poses safety risks due to weather conditions.
+
+2. WIND SPEED RESTRICTIONS
+
+2.1 Crane Operations
+- Maximum allowable wind speed: 20 mph (32 km/h) sustained winds
+- Maximum gust speed: 30 mph (48 km/h)
+- Operations must cease when winds exceed these thresholds
+- Crane boom must be lowered and secured during high wind events
+
+2.2 Scaffolding Work
+- Work prohibited when winds exceed 25 mph (40 km/h)
+- All materials must be secured when winds exceed 15 mph (24 km/h)
+- Scaffolding must be inspected after any wind event exceeding 30 mph
+
+2.3 Roofing Operations
+- No roof work when winds exceed 20 mph (32 km/h)
+- Special caution required for work above 15 mph
+- Workers must use 100% tie-off when winds exceed 10 mph
+
+2.4 Personnel Lifts and Aerial Platforms
+- Maximum operating wind speed: 28 mph (45 km/h)
+- Work must stop at 25 mph sustained winds
+- Ground personnel must monitor wind conditions continuously
+
+3. PRECIPITATION RESTRICTIONS
+
+3.1 Rain
+- Light rain (< 2.5mm/hour): Operations may continue with caution
+- Moderate rain (2.5-7.5mm/hour): Non-critical operations should pause
+- Heavy rain (> 7.5mm/hour): All outdoor work must stop
+- 24-hour rainfall exceeding 25mm requires site inspection before resuming work
+
+3.2 Snow and Ice
+- Accumulation of 1 inch (25mm) or more requires work stoppage
+- Icy conditions on scaffolding or elevated surfaces: No access permitted
+- Roof snow load must be monitored; work prohibited if structural concerns exist
+
+3.3 Thunderstorms
+- All outdoor work must cease when lightning is within 10 miles (16 km)
+- 30-minute wait period after last observed lightning before resuming
+- Workers must seek shelter in substantial buildings or hard-topped vehicles
+
+4. TEMPERATURE EXTREMES
+
+4.1 Cold Weather (OSHA Guidelines)
+- Work pace must be reduced below 20°F (-6°C)
+- Mandatory warm-up breaks every 2 hours below 10°F (-12°C)
+- Work prohibited below 0°F (-18°C) without specialized equipment
+
+4.2 Hot Weather
+- Increased hydration breaks above 85°F (29°C)
+- Work intensity reduced above 90°F (32°C)
+- Heat stress monitoring required above 95°F (35°C)
+
+5. VISIBILITY CONDITIONS
+
+5.1 Fog
+- Operations requiring crane signals or visual communication: Work prohibited when visibility < 500 feet (150m)
+- Vehicle movement restricted when visibility < 1000 feet (300m)
+
+5.2 Dust Storms
+- All outdoor work must cease during dust storms
+- Eye protection required when dust is present
+
+6. SPECIALIZED OPERATIONS
+
+6.1 Concrete Pouring
+- No concrete pouring during rain or when rain is imminent
+- Temperature must be above 40°F (4°C) and rising
+- Wind chill factor must not bring effective temperature below freezing
+
+6.2 Excavation Work
+- Stop work if water accumulation exceeds 6 inches (150mm)
+- Monitor for soil saturation after heavy rain (> 12mm in 24 hours)
+- Enhanced shoring inspection required after precipitation events
+
+7. SITE PREPARATION AND RESPONSE
+
+7.1 Weather Monitoring
+- Sites must have access to current and forecast weather data
+- Designate weather monitor for critical lifts and operations
+- Weather updates required every 4 hours during active operations
+
+7.2 Emergency Procedures
+- Clear evacuation routes must be maintained
+- Emergency contact numbers posted prominently
+- Site-specific weather emergency plan must be documented
+
+8. DOCUMENTATION
+
+8.1 Weather Logs
+- Record weather conditions at start of each shift
+- Document any weather-related work stoppages
+- Maintain records for minimum 3 years
+
+8.2 Incident Reporting
+- All weather-related incidents must be reported within 24 hours
+- Near-miss events should be documented for safety review
+
+9. COMPLIANCE
+
+Failure to follow these weather safety protocols may result in:
+- Immediate work stoppage
+- Safety violations and fines
+- Loss of site access privileges
+- Termination of employment for serious violations
+
+Remember: WHEN IN DOUBT, STOP WORK AND CONSULT YOUR SUPERVISOR.
+
+Document Control: SAFETY-MANUAL-WEATHER-v2.1
+Effective Date: January 2024
+Next Review: January 2025

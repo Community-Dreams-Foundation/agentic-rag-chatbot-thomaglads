@@ -1,0 +1,9 @@
+Sample Safety Manual
+
+1. Crane Operations
+   - Do not operate cranes if wind speeds exceed 20 mph.
+   - Stop work if rainfall exceeds 5mm/hour.
+
+2. Roof Work
+   - Requires fall protection.
+   - Do not work on wet surfaces.

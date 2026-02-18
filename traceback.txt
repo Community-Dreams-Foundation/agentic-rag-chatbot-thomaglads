@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "C:\Users\thist\.gemini\antigravity\scratch\codex\debug_trace.py", line 9, in <module>
+    from src.agent import ComplianceAgent
+  File "C:\Users\thist\.gemini\antigravity\scratch\codex\src\agent\__init__.py", line 3, in <module>
+    from .compliance_agent import ComplianceAgent, SafetyDecision
+  File "C:\Users\thist\.gemini\antigravity\scratch\codex\src\agent\compliance_agent.py", line 14, in <module>
+    from ..memory import MemoryManager, MemoryType
+ImportError: cannot import name 'MemoryType' from 'src.memory' (C:\Users\thist\.gemini\antigravity\scratch\codex\src\memory\__init__.py)
