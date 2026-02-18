@@ -1,8 +1,8 @@
 # Codex - Operational Risk & Compliance Agent
 
-[![Review Assignment Due Date](https://camo.githubusercontent.com/fddb80fc6041abdf59514ea69b4629955c7f39ce549e081d6c3059f1f4a33af9/68747470733a2f2f636c617373726f6f6d2e6769746875622e636f6d2f6173736574732f646561646c696e652d726561646d652d627574746f6e2d323230343161666430333430636539363564343761653665663163656665656532386337633439336136333436633466313564363637616239373664353936632e737667)](https://classroom.github.com/a/P5MLsfQv)
+(https://camo.githubusercontent.com/fddb80fc6041abdf59514ea69b4629955c7f39ce549e081d6c3059f1f4a33af9/68747470733a2f2f636c617373726f6f6d2e6769746875622e636f6d2f6173736574732f646561646c696e652d726561646d652d627574746f6e2d323230343161666430333430636539363564343761653665663163656665656532386337633439336136333436633466313564363637616239373664353936632e737667)](https://classroom.github.com/a/P5MLsfQv)
 
-> **Winner's Focus**: This isn't just a chatbot—it's an **Operational Risk & Compliance Agent** that bridges the gap between static safety manuals and real-time operational conditions.
+>  This isn't just a chatbot—it's an **Operational Risk & Compliance Agent** that bridges the gap between static safety manuals and real-time operational conditions.
 
 ## The Problem: The "Disconnected Operations" Gap
 
