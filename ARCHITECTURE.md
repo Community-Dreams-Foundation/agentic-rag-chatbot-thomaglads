@@ -57,7 +57,7 @@ Codex is an **Operational Risk & Compliance Agent** that bridges the gap between
 - Uses `RecursiveCharacterTextSplitter` for semantic chunking
 - Stores chunk index and total chunks for precise citations
 - ChromaDB persists locally for fast retrieval
-- Embeddings: OpenAI `text-embedding-3-small` for quality/cost balance
+- Embeddings: NVIDIA `llama-3.2-nv-embedqa-1b-v2` for quality/cost balance
 
 **Citation Format**:
 ```
@@ -193,8 +193,8 @@ Response to User
 | Component | Technology | Rationale |
 |-----------|-----------|-----------|
 | **Language** | Python 3.9+ | Ecosystem, readability |
-| **LLM** | OpenAI GPT-4o-mini | Quality/cost balance |
-| **Embeddings** | OpenAI text-embedding-3-small | Quality, speed |
+| **LLM** | NVIDIA `meta/llama-3.1-70b-instruct` | Quality/cost balance |
+| **Embeddings** | NVIDIA `llama-3.2-nv-embedqa-1b-v2` | Quality, speed |
 | **Vector DB** | ChromaDB | Local, no external deps |
 | **RAG Framework** | LangChain | Modular, well-documented |
 | **UI** | Streamlit | Rapid prototyping |
@@ -262,7 +262,7 @@ Response to User
 ```bash
 pip install -e ".[dev]"
 cp .env.example .env
-# Edit .env with OPENAI_API_KEY
+# Edit .env with NVIDIA_API_KEY
 make ui  # Run web interface
 ```
 
@@ -274,7 +274,7 @@ make ui  # Run web interface
 
 ## Trade-offs Made
 
-1. **OpenAI vs Local Models**: Chose OpenAI for quality; local models would reduce latency/cost but increase complexity
+1. **NVIDIA vs Local Models**: Chose NVIDIA Hosted API for quality; local models would reduce latency/cost but increase complexity
 
 2. **ChromaDB vs Pinecone**: ChromaDB is local and free; Pinecone would offer better scale but adds dependency
 
