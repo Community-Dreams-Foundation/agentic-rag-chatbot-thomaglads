@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "codex-compliance-agent"
 version = "1.0.0"
 description = "Codex - Operational Risk & Compliance Agent"
-authors = [{name = "Your Name", email = "your.email@example.com"}]
+authors = [{name = "Thoma Glads Choppala", email = "this.thoma@gmail.com"}]
 license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.9"
