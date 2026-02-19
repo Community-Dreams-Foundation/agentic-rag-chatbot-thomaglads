@@ -415,9 +415,10 @@ def render_chat_tab(agent):
             )
 
             if metadata['citations']:
-                with st.expander(f"[SOURCES] {len(metadata['citations'])} Source(s)"):
+                with st.expander(f"📎 {len(metadata['citations'])} Source(s)"):
                     for citation in metadata['citations'][:3]:
-                        st.markdown(f"**[{citation['number']}]** `{citation['filename']}`")
+                        page_info = f" · p.{citation['page']}" if citation.get('page') else ""
+                        st.markdown(f"**[{citation['number']}]** `{citation['filename']}`{page_info}")
                         if citation.get('text_preview'):
                             st.caption(citation['text_preview'])
 

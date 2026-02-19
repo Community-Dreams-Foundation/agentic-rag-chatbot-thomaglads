@@ -45,9 +45,23 @@ class LlamaQueryEngine:
             from llama_index.vector_stores.chroma import ChromaVectorStore
             from llama_index.core import StorageContext
 
-            # Configure LlamaIndex via Factory
-            Settings.llm = LLMFactory.create_llm(model=os.getenv("NVIDIA_MODEL", "meta/llama-3.1-70b-instruct"))
-            Settings.embed_model = LLMFactory.create_embeddings()
+            # Configure LlamaIndex using native NVIDIA classes (no LangChain wrapper needed)
+            from llama_index.llms.nvidia import NVIDIA
+            from llama_index.embeddings.nvidia import NVIDIAEmbedding
+
+            nvidia_base_url = "https://integrate.api.nvidia.com/v1"
+            nvidia_api_key = os.getenv("NVIDIA_API_KEY")
+
+            Settings.llm = NVIDIA(
+                model=os.getenv("NVIDIA_MODEL", "meta/llama-3.1-70b-instruct"),
+                api_key=nvidia_api_key,
+                base_url=nvidia_base_url,
+            )
+            Settings.embed_model = NVIDIAEmbedding(
+                model=os.getenv("NVIDIA_EMBED_MODEL", "nvidia/llama-3.2-nv-embedqa-1b-v2"),
+                api_key=nvidia_api_key,
+                base_url=nvidia_base_url,
+            )
 
             # Connect to the same ChromaDB collection as LangChain
             chroma_client = chromadb.PersistentClient(path=self.persist_directory)

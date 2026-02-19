@@ -48,46 +48,64 @@ class DocumentIngestion:
     ) -> List[Document]:
         """
         Ingest a document and return chunked Documents with metadata.
-        
+
         Args:
             file_path: Path to the document
             document_type: Type of document (e.g., 'safety_manual', 'contract')
             metadata: Additional metadata to attach
-            
+
         Returns:
             List of Document chunks
         """
         file_path = Path(file_path)
-        
-        # Parse document based on type
+        all_chunks = []
+
         if file_path.suffix.lower() == '.pdf':
-            text = self.parse_pdf(str(file_path))
+            # Process page-by-page to preserve page number metadata
+            reader = PdfReader(str(file_path))
+            total_pages = len(reader.pages)
+            for page_num, page in enumerate(reader.pages, 1):
+                page_text = page.extract_text() or ""
+                if not page_text.strip():
+                    continue
+                page_metadata = {
+                    "source": str(file_path),
+                    "filename": file_path.name,
+                    "document_type": document_type or "unknown",
+                    "document_id": str(uuid.uuid4()),
+                    "page": page_num,
+                    "total_pages": total_pages,
+                }
+                if metadata:
+                    page_metadata.update(metadata)
+                page_chunks = self.text_splitter.create_documents(
+                    texts=[page_text],
+                    metadatas=[page_metadata],
+                )
+                for i, chunk in enumerate(page_chunks):
+                    chunk.metadata["chunk_index"] = i
+                    chunk.metadata["total_chunks"] = len(page_chunks)
+                all_chunks.extend(page_chunks)
         else:
             text = self.parse_text_file(str(file_path))
-        
-        # Create base metadata
-        base_metadata = {
-            "source": str(file_path),
-            "filename": file_path.name,
-            "document_type": document_type or "unknown",
-            "document_id": str(uuid.uuid4()),
-        }
-        
-        if metadata:
-            base_metadata.update(metadata)
-        
-        # Split into chunks
-        chunks = self.text_splitter.create_documents(
-            texts=[text],
-            metadatas=[base_metadata]
-        )
-        
-        # Add chunk indices for citations
-        for i, chunk in enumerate(chunks):
-            chunk.metadata["chunk_index"] = i
-            chunk.metadata["total_chunks"] = len(chunks)
-        
-        return chunks
+            base_metadata = {
+                "source": str(file_path),
+                "filename": file_path.name,
+                "document_type": document_type or "unknown",
+                "document_id": str(uuid.uuid4()),
+            }
+            if metadata:
+                base_metadata.update(metadata)
+            chunks = self.text_splitter.create_documents(
+                texts=[text],
+                metadatas=[base_metadata],
+            )
+            for i, chunk in enumerate(chunks):
+                chunk.metadata["chunk_index"] = i
+                chunk.metadata["total_chunks"] = len(chunks)
+            all_chunks = chunks
+
+        return all_chunks
     
     def ingest_directory(
         self,

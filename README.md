@@ -152,7 +152,7 @@ python -m src.ui.cli demo
 
 ## Video Walkthrough
 
-**[Link to Demo Video]** *(5-10 minutes)*
+**[▶️ Watch Demo on YouTube](https://youtu.be/qFhx0KbB_9Q)** *(Demo walkthrough)*
 
 *Demonstrates:*
 - End-to-end safety compliance workflow

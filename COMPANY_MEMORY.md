@@ -8,3 +8,5 @@ This file contains organization-wide learnings and site-specific issues.
 
 - [2026-02-17 20:21] Test memory entry for sanity check
 - [2026-02-18 16:32] Safety pause at Boston due to weather violations
+- [2026-02-19 01:16] Safety pause at Boston  due to weather violations
+- [2026-02-19 01:34] Safety pause at New York  due to weather violations
