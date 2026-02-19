@@ -1,0 +1,173 @@
+/* Codex - Custom Streamlit Styles */
+
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Global font */
+html, body, [class*="css"] {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Hide default Streamlit branding */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+
+/* Main background */
+.stApp {
+    background: linear-gradient(135deg, #0a0a0f 0%, #0d1117 50%, #0a0f1a 100%);
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #0d1117 0%, #161b22 100%);
+    border-right: 1px solid #21262d;
+}
+
+/* Header gradient text */
+h1 {
+    background: linear-gradient(135deg, #58a6ff, #79c0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Metric cards */
+[data-testid="stMetric"] {
+    background: rgba(22, 27, 34, 0.8);
+    border: 1px solid #21262d;
+    border-radius: 12px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+}
+
+/* Buttons */
+.stButton > button {
+    background: linear-gradient(135deg, #1f6feb, #388bfd);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(31, 111, 235, 0.3);
+}
+
+.stButton > button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(31, 111, 235, 0.5);
+}
+
+/* Input fields */
+.stTextInput > div > div > input {
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    color: #e6edf3;
+    font-family: 'Inter', sans-serif;
+}
+
+.stTextInput > div > div > input:focus {
+    border-color: #388bfd;
+    box-shadow: 0 0 0 3px rgba(56, 139, 253, 0.15);
+}
+
+/* Selectbox */
+.stSelectbox > div > div {
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    color: #e6edf3;
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+    background: rgba(13, 17, 23, 0.8);
+    border-radius: 10px;
+    padding: 4px;
+    gap: 4px;
+    border: 1px solid #21262d;
+}
+
+.stTabs [data-baseweb="tab"] {
+    border-radius: 8px;
+    color: #8b949e;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s ease;
+}
+
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, #1f6feb, #388bfd) !important;
+    color: white !important;
+}
+
+/* Success/Error/Info boxes */
+.stSuccess {
+    background: rgba(35, 134, 54, 0.15);
+    border: 1px solid #238636;
+    border-radius: 8px;
+}
+
+.stError {
+    background: rgba(218, 54, 51, 0.15);
+    border: 1px solid #da3633;
+    border-radius: 8px;
+}
+
+.stInfo {
+    background: rgba(31, 111, 235, 0.1);
+    border: 1px solid #1f6feb;
+    border-radius: 8px;
+}
+
+/* Expander */
+.streamlit-expanderHeader {
+    background: rgba(22, 27, 34, 0.8);
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* Chat messages */
+[data-testid="stChatMessage"] {
+    background: rgba(22, 27, 34, 0.6);
+    border: 1px solid #21262d;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    backdrop-filter: blur(10px);
+}
+
+/* Spinner */
+.stSpinner > div {
+    border-top-color: #388bfd !important;
+}
+
+/* File uploader */
+[data-testid="stFileUploader"] {
+    background: rgba(22, 27, 34, 0.6);
+    border: 2px dashed #30363d;
+    border-radius: 12px;
+    transition: border-color 0.2s ease;
+}
+
+[data-testid="stFileUploader"]:hover {
+    border-color: #388bfd;
+}
+
+/* Divider */
+hr {
+    border-color: #21262d;
+    opacity: 0.5;
+}
+
+/* Caption text */
+.stCaption {
+    color: #8b949e;
+}
+
+/* JSON viewer */
+.stJson {
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid #21262d;
+    border-radius: 8px;
+}

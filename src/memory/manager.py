@@ -7,10 +7,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 
-from langchain_nvidia_ai_endpoints import ChatNVIDIA
-from langchain_core.messages import HumanMessage, SystemMessage
-
 from .models import MemoryDecision, MemoryEntry, MemoryType
+from ..utils import LLMFactory, logger
 
 
 class MemoryManager:
@@ -23,16 +21,15 @@ class MemoryManager:
         self,
         user_memory_file: str = "USER_MEMORY.md",
         company_memory_file: str = "COMPANY_MEMORY.md",
-        model: str = "moonshotai/kimi-k2.5",
+        model: str = "meta/llama-3.1-70b-instruct",
     ):
         self.user_memory_file = Path(user_memory_file)
         self.company_memory_file = Path(company_memory_file)
         
-        # Initialize NVIDIA NIM with Kimi K2.5
-        self.llm = ChatNVIDIA(
+        # Initialize LLM via Factory
+        self.llm = LLMFactory.create_llm(
             model=model,
             temperature=0,
-            base_url=os.getenv("NVIDIA_BASE_URL", "https://integrate.api.nvidia.com/v1"),
         )
         
         # Ensure memory files exist
@@ -162,7 +159,7 @@ Respond in JSON format:
                 f.write(entry.to_markdown() + '\n')
             return True
         except Exception as e:
-            print(f"Error writing memory: {e}")
+            logger.error(f"Error writing memory: {e}")
             return False
     
     def add_memory_from_conversation(

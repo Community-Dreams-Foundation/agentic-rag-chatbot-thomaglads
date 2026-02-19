@@ -1,6 +1,7 @@
 """Safe sandbox for weather data analysis."""
 
 import ast
+from datetime import datetime
 from typing import Any, Dict
 
 import pandas as pd

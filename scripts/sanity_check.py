@@ -42,7 +42,7 @@ def run_sanity_check():
     
     try:
         # Check 1: Environment
-        print("\n✓ Check 1: Environment setup...")
+        print("\n[1] Check 1: Environment setup...")
         if not os.getenv('NVIDIA_API_KEY'):
             results["checks"]["environment"] = {
                 "status": "SKIP",
@@ -56,7 +56,7 @@ def run_sanity_check():
             }
         
         # Check 2: Document ingestion
-        print("✓ Check 2: Document ingestion...")
+        print("[2] Check 2: Document ingestion...")
         try:
             ingestion = DocumentIngestion()
             
@@ -83,7 +83,7 @@ def run_sanity_check():
             }
         
         # Check 3: Vector store
-        print("✓ Check 3: Vector store...")
+        print("[3] Check 3: Vector store...")
         try:
             store = DocumentStore()
             stats = store.get_collection_stats()
@@ -99,7 +99,7 @@ def run_sanity_check():
             }
         
         # Check 4: Memory system
-        print("✓ Check 4: Memory system...")
+        print("[4] Check 4: Memory system...")
         try:
             memory = MemoryManager()
             
@@ -127,7 +127,7 @@ def run_sanity_check():
         
         # Check 5: Full agent workflow (if API key available)
         if os.getenv('NVIDIA_API_KEY'):
-            print("✓ Check 5: Full agent workflow...")
+            print("[5] Check 5: Full agent workflow...")
             try:
                 agent = ComplianceAgent()
                 
@@ -184,7 +184,7 @@ def run_sanity_check():
     print("\nDetailed Results:")
     for check_name, check_result in results["checks"].items():
         status = check_result.get("status", "UNKNOWN")
-        icon = "✅" if status == "PASS" else "❌" if status == "FAIL" else "⏭️"
+        icon = "[OK]" if status == "PASS" else "[FAIL]" if status == "FAIL" else "[SKIP]"
         print(f"  {icon} {check_name}: {status}")
     
     return results

@@ -65,9 +65,9 @@ Bot:
 
 ## Participant Info (Required)
 
-- **Full Name**: [Your Name]
-- **Email**: [Your Email]
-- **GitHub Username**: [Your GitHub Username]
+- **Full Name**: Thoma Glads Choppala
+- **Email**: this.thoma@gmail.com
+- **GitHub Username**: thomaglads
 
 ## Quick Start
 

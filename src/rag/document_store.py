@@ -5,7 +5,8 @@ from typing import List, Optional
 
 from langchain_core.documents import Document
 from langchain_chroma import Chroma
-from langchain_nvidia_ai_endpoints import NVIDIAEmbeddings
+
+from ..utils import LLMFactory
 
 
 class DocumentStore:
@@ -21,12 +22,8 @@ class DocumentStore:
         )
         self.collection_name = collection_name
         
-        # Initialize embeddings with NVIDIA NIM
-        self.embeddings = NVIDIAEmbeddings(
-            model=os.getenv("EMBEDDING_MODEL", "nvidia/llama-3.2-nv-embedqa-1b-v2"),
-            truncate="NONE",
-            base_url=os.getenv("NVIDIA_BASE_URL", "https://integrate.api.nvidia.com/v1"),
-        )
+        # Initialize embeddings via Factory
+        self.embeddings = LLMFactory.create_embeddings()
         
         # Initialize vector store
         self.vector_store = Chroma(

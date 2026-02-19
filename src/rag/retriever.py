@@ -4,9 +4,8 @@ import os
 from typing import Dict, List, Optional
 
 from langchain_core.documents import Document
-from langchain_nvidia_ai_endpoints import ChatNVIDIA
-
 from .document_store import DocumentStore
+from ..utils import LLMFactory
 
 
 class ComplianceRetriever:
@@ -15,15 +14,14 @@ class ComplianceRetriever:
     def __init__(
         self,
         document_store: DocumentStore,
-        model: str = "moonshotai/kimi-k2.5",
+        model: str = "meta/llama-3.1-70b-instruct",
     ):
         self.document_store = document_store
         
-        # Initialize NVIDIA NIM with Kimi K2.5
-        self.llm = ChatNVIDIA(
+        # Initialize LLM via Factory
+        self.llm = LLMFactory.create_llm(
             model=model,
             temperature=0,
-            base_url=os.getenv("NVIDIA_BASE_URL", "https://integrate.api.nvidia.com/v1"),
         )
     
     def retrieve_with_citations(

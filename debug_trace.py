@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 try:
     from src.agent import ComplianceAgent
     print("Success")
-except:
+except Exception as e:
     with open("traceback.txt", "w") as f:
         traceback.print_exc(file=f)
-    print("Failed - check traceback.txt")
+    print(f"Failed - {e} - check traceback.txt")

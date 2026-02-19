@@ -37,6 +37,9 @@ dependencies = [
     "llama-index>=0.10.0",
     "llama-index-embeddings-nvidia>=0.1.0",
     "llama-index-llms-nvidia>=0.1.0",
+    "llama-index-vector-stores-chroma>=0.1.0",
+    "langchain-chroma>=0.1.0",
+    "langchain-text-splitters>=0.0.1",
     
     # Document Processing
     "pypdf>=3.17.0",
@@ -60,6 +63,7 @@ dependencies = [
     # Utilities
     "python-dateutil>=2.8.0",
     "tqdm>=4.66.0",
+    "fpdf2>=2.7.0",
 ]
 
 [project.optional-dependencies]

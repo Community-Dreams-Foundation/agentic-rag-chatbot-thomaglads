@@ -200,29 +200,53 @@ class OpenMeteoClient:
         """
         Geocode a location name to coordinates.
         Uses Open-Meteo Geocoding API.
+        Tries multiple query variations for robustness.
         """
         url = "https://geocoding-api.open-meteo.com/v1/search"
-        params = {
-            "name": location_name,
-            "count": 1,
-            "language": "en",
-            "format": "json",
-        }
-        
-        response = self.session.get(url, params=params, timeout=10)
-        response.raise_for_status()
-        
-        data = response.json()
-        results = data.get("results", [])
-        
-        if results:
-            result = results[0]
-            return {
-                "name": result.get("name"),
-                "latitude": result.get("latitude"),
-                "longitude": result.get("longitude"),
-                "country": result.get("country"),
-                "admin1": result.get("admin1"),  # State/Province
+
+        # Build a list of query variations to try in order
+        queries = [location_name]
+
+        # If it has a comma, also try just the part before the comma
+        if "," in location_name:
+            queries.append(location_name.split(",")[0].strip())
+
+        # If it has a space (e.g. "Boston MA"), also try just the first word
+        parts = location_name.split()
+        if len(parts) > 1:
+            queries.append(parts[0])
+
+        # Also try removing common site prefixes like "Site Alpha -"
+        import re
+        cleaned = re.sub(r'^(site\s+\w+\s*[-–]?\s*)', '', location_name, flags=re.IGNORECASE).strip()
+        if cleaned and cleaned != location_name:
+            queries.append(cleaned)
+
+        for query in queries:
+            if not query:
+                continue
+            params = {
+                "name": query,
+                "count": 1,
+                "language": "en",
+                "format": "json",
             }
-        
+            try:
+                response = self.session.get(url, params=params, timeout=10)
+                response.raise_for_status()
+                data = response.json()
+                results = data.get("results", [])
+
+                if results:
+                    result = results[0]
+                    return {
+                        "name": result.get("name"),
+                        "latitude": result.get("latitude"),
+                        "longitude": result.get("longitude"),
+                        "country": result.get("country"),
+                        "admin1": result.get("admin1"),  # State/Province
+                    }
+            except Exception:
+                continue
+
         return None

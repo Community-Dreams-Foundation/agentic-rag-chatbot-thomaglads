@@ -3,6 +3,7 @@
 import json
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, List, Optional
@@ -13,6 +14,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from ..rag import ComplianceRetriever, DocumentIngestion, DocumentStore
 from ..memory import MemoryManager, MemoryType
 from ..weather import OpenMeteoClient, WeatherSandbox
+from ..utils import LLMFactory, logger
 
 
 @dataclass
@@ -61,16 +63,15 @@ class ComplianceAgent:
     def __init__(
         self,
         persist_directory: Optional[str] = None,
-        model: str = "moonshotai/kimi-k2.5",
+        model: str = "meta/llama-3.1-70b-instruct",
     ):
         self.model = model
         
         # Initialize NVIDIA NIM with Kimi K2.5
-        self.llm = ChatNVIDIA(
+        # Initialize LLM via Factory
+        self.llm = LLMFactory.create_llm(
             model=model,
             temperature=float(os.getenv("LLM_TEMPERATURE", "0.7")),
-            max_tokens=int(os.getenv("LLM_MAX_TOKENS", "16384")),
-            base_url=os.getenv("NVIDIA_BASE_URL", "https://integrate.api.nvidia.com/v1"),
         )
         
         # Initialize components
@@ -80,6 +81,12 @@ class ComplianceAgent:
         self.memory_manager = MemoryManager()
         self.weather_client = OpenMeteoClient()
         self.weather_sandbox = WeatherSandbox()
+        
+        # LlamaIndex query engine for conversational Q&A (chat tab)
+        # Lazy-initialized on first use to avoid startup cost
+        from ..rag import LlamaQueryEngine
+        self._llama_engine = LlamaQueryEngine(persist_directory=persist_directory)
+
     
     def ingest_documents(
         self,
@@ -106,7 +113,87 @@ class ComplianceAgent:
             self.document_store.add_documents(chunks)
             total_chunks += len(chunks)
         
+        # Refresh LlamaIndex so it sees the new documents immediately
+        if total_chunks > 0:
+            self._llama_engine.refresh()
+            
         return total_chunks
+    
+    def ask_question(self, question: str) -> Dict:
+        """
+        Answer a compliance question using LlamaIndex (conversational RAG).
+        Falls back to LangChain retriever if LlamaIndex is unavailable.
+        """
+        start_time = time.time()
+        # Try LlamaIndex first
+        try:
+            result = self._llama_engine.query(question)
+            if result["answer"] and not result["answer"].startswith("Query failed"):
+                citations = []
+                for i, src in enumerate(result.get("sources", []), 1):
+                    citations.append({
+                        "number": i,
+                        "filename": src.get("filename", "Unknown"),
+                        "relevance_score": src.get("score", "N/A"),
+                        "text_preview": src.get("text_preview", ""),
+                    })
+                return {
+                    "answer": result["answer"],
+                    "citations": citations,
+                    "engine": "LlamaIndex",
+                    "latency_ms": int((time.time() - start_time) * 1000),
+                }
+        except Exception:
+            pass
+
+        # Fallback: LangChain retriever + LLM
+        try:
+            retrieval = self.retriever.retrieve_with_citations(question, k=4)
+            context = retrieval.get("context", "No relevant documents found.")
+            citations_raw = retrieval.get("citations", [])
+
+            from langchain_core.messages import HumanMessage, SystemMessage
+            messages = [
+                SystemMessage(content=(
+                    "You are Codex, an operational risk and compliance assistant. "
+                    "Answer the user's question based on the provided compliance documents. "
+                    "Be concise and cite specific rules when relevant.\n\n"
+                    f"DOCUMENTS:\n{context}"
+                )),
+                HumanMessage(content=question),
+            ]
+            response = self.llm.invoke(messages)
+            answer = response.content if hasattr(response, 'content') else str(response)
+
+            citations = []
+            for c in citations_raw:
+                citations.append({
+                    "number": c.get("number", 0),
+                    "filename": c.get("filename", "Unknown"),
+                    "relevance_score": c.get("relevance_score", "N/A"),
+                    "text_preview": c.get("text", "")[:150],
+                })
+
+            return {
+                "answer": answer,
+                "citations": citations,
+                "engine": "LangChain",
+                "latency_ms": int((time.time() - start_time) * 1000),
+            }
+        except Exception as e:
+            return {
+                "answer": f"Error answering question: {str(e)}",
+                "citations": [],
+                "engine": "Fallback",
+                "latency_ms": int((time.time() - start_time) * 1000),
+            }
+        except Exception as e:
+            return {
+                "answer": f"I couldn't find an answer. Please upload compliance documents first.\n\nError: {str(e)}",
+                "citations": [],
+                "engine": "Error",
+            }
+
     
     def check_site_safety(
         self,
@@ -138,7 +225,7 @@ class ComplianceAgent:
         )
         
         # Step 1: Retrieve safety rules (RAG)
-        print(f"🔍 Searching safety manual for {operation_type} rules...")
+        logger.info(f"Searching safety manual for {operation_type} rules...")
         rag_results = self.retriever.find_safety_rules(
             operation=operation_type,
             site_location=site_location,
@@ -148,7 +235,7 @@ class ComplianceAgent:
         decision.citations = rag_results["citations"]
         
         # Step 2: Check memory
-        print(f"🧠 Checking memory for {site_location}...")
+        logger.info(f"Checking memory for {site_location}...")
         decision.user_memory_context = self.memory_manager.get_relevant_context(
             query=f"user {site_location} {operation_type}",
             memory_type=MemoryType.USER,
@@ -163,7 +250,7 @@ class ComplianceAgent:
         # Step 3: Check weather (if enabled and location can be geocoded)
         weather_compliance = None
         if check_weather:
-            print(f"🌤️ Checking weather for {site_location}...")
+            logger.info(f"Checking weather for {site_location}...")
             location_data = self.weather_client.geocode_location(site_location)
             
             if location_data:
@@ -186,11 +273,11 @@ class ComplianceAgent:
                 )
         
         # Step 4: Make decision using LLM
-        print("🤔 Analyzing compliance...")
+        logger.info("Analyzing compliance...")
         decision = self._make_safety_decision(decision)
         
         # Step 5: Update memory with this interaction
-        print("💾 Updating memory...")
+        logger.info("Updating memory...")
         self._update_memory(decision)
         
         return decision
@@ -341,65 +428,6 @@ Based on the above information, can this operation proceed safely?"""
                 "type": "user",
                 "content": memory_text,
             })
-    
-    def ask_question(
-        self,
-        question: str,
-        site_location: Optional[str] = None,
-    ) -> Dict:
-        """
-        Ask a general question about compliance/safety.
-        
-        Args:
-            question: The question to ask
-            site_location: Optional site context
-            
-        Returns:
-            Dict with answer and citations
-        """
-        # Retrieve relevant documents
-        rag_results = self.retriever.retrieve_with_citations(
-            query=question,
-            k=5,
-        )
-        
-        # Get memory context
-        memory_context = ""
-        if site_location:
-            memory_context = self.memory_manager.get_relevant_context(
-                query=f"{site_location} {question}",
-                max_entries=3,
-            )
-        
-        # Build prompt
-        system_prompt = """You are a compliance assistant. Answer the user's question based on the provided documentation.
-Always cite your sources using the citation numbers provided in the context.
-
-If the information isn't in the context, say so clearly."""
-
-        context = rag_results["context"]
-        if memory_context:
-            context = f"MEMORY CONTEXT:\n{memory_context}\n\nDOCUMENTS:\n{context}"
-        
-        user_message = f"""Context:
-{context}
-
-Question: {question}
-
-Provide a clear answer with citations."""
-
-        messages = [
-            SystemMessage(content=system_prompt),
-            HumanMessage(content=user_message),
-        ]
-        
-        response = self.llm.invoke(messages)
-        
-        return {
-            "answer": response.content,
-            "citations": rag_results["citations"],
-            "context_used": bool(rag_results["documents"]),
-        }
     
     def get_stats(self) -> Dict:
         """Get system statistics."""
